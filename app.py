@@ -1,9 +1,10 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import LoginForm, RegistrationForm
+import os
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'e21ad7d810cb03111e52e4a687f8ee35'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 decks = [
     {
