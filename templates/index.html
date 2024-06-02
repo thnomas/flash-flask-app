@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+Index page - home
+
+{% for deck in decks %}
+    <article class="media content-section">
+        <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="#">{{ deck.author }}</a>
+            <small class="text-muted">{{ deck.date_created }}</small>
+        </div>
+        <h2><a class="article-title" href="#">{{ deck.title }}</a></h2>
+        <p class="article-content">{{ deck.content }}</p>
+        </div>
+    </article>
+{% endfor %}
+
+{% endblock content %}
