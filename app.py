@@ -3,7 +3,7 @@ from forms import LoginForm, RegistrationForm
 import os
 
 app = Flask(__name__)
-
+app.secret_key = os.environ.get('SECRET_KEY')  # Set secret key from environment variable
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 decks = [
@@ -36,9 +36,6 @@ def register():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('index'))
     return render_template('register.html', title='Register', form=form)
-
-
-
     
 @app.get("/login")
 def login():
