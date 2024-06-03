@@ -150,5 +150,11 @@ h3 {
 }
 
 .username {
-    font-weight: 100;
+    font-weight: 900;
+
+}
+
+i{ 
+    padding-right: 7px;
+    color:#ffcc26;
 }
