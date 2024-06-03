@@ -5,3 +5,4 @@ instance/
 *.db
 *.sqlite
 *.sqlite3
+app/static/profile_pics/*
