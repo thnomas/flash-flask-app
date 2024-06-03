@@ -52,3 +52,8 @@ class DeckForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description')
     submit = SubmitField('Create')
+
+class CardForm(FlaskForm):
+    front = StringField('Front', validators=[DataRequired()])
+    back = StringField('Back')
+    submit = SubmitField('Create')

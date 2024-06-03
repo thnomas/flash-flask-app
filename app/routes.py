@@ -1,26 +1,22 @@
 from flask import render_template, url_for, flash, redirect, request
-from app.forms import LoginForm, RegistrationForm, UpdateAccountForm, DeckForm
-from app.models import User, Deck
+from app.forms import LoginForm, RegistrationForm, UpdateAccountForm, DeckForm, CardForm
+from app.models import User, Deck, Card
 from app import app, db, bcrypt
 import secrets
 from PIL import Image
 import os
 from flask_login import login_user, logout_user, login_required, current_user
 
-@app.get("/")
-@login_required
-def index():
-    decks = Deck.query.all()
-    return render_template('index.html', decks=decks, title="Home")
-
-@app.get("/review")
-def review():
-    return render_template('review.html')
-
-@app.get("/quiz")
-def quiz():
-    return render_template('quiz.html')
-
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex +f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    output_size = (250, 250)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -58,16 +54,22 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex +f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-    output_size = (250, 250)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-    return picture_fn
+@app.get("/")
+@login_required
+def index():
+    decks = Deck.query.all()
+    return render_template('index.html', decks=decks, title="Home")
+
+@app.get("/review")
+@login_required
+def review():
+    decks = Deck.query.filter_by(user_id=current_user.id).all()
+    return render_template('review.html', decks=decks)
+
+@app.get("/quiz")
+@login_required
+def quiz():
+    return render_template('quiz.html')
 
 @app.route("/account", methods=['GET','POST'])
 @login_required
@@ -99,5 +101,17 @@ def create_deck():
         db.session.commit()
         flash('Deck created', 'success')
         return redirect(url_for('create_deck'))
-
     return render_template('create_deck.html', form=form, decks=decks)
+
+@app.route("/deck/<int:deck_id>", methods=['GET', 'POST'])
+@login_required
+def deck(deck_id):
+    deck = Deck.query.get_or_404(deck_id)
+    form = CardForm()
+    if form.validate_on_submit():
+        card = Card(front=form.front.data, back=form.back.data, author=current_user, deck=deck)
+        db.session.add(card)
+        db.session.commit()
+        flash('Card created', 'success')
+        return redirect(url_for('deck',  deck_id=deck.id))
+    return render_template('deck.html', title=deck.title, form=form, deck=deck)

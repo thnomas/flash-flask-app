@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>
-    REVIEW TIMe!
+    REVIEW TIME
 </h1>  
+
+{% for deck in decks %}
+    <a href="{{ url_for('create_deck') }}">{{ deck.title }}</a>
+    <p>{{ deck.created_by.username }}</p>
+    <p>deck_id: {{ deck.id }}</p>
+    <hr>
+
+{% endfor %}
 
 {% endblock content %}

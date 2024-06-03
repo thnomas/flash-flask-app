@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Add to your existing decks...</h2>
+<h2>Add cards to an existing deck...</h2>
 {% for deck in decks %}
-    <a href="{{ url_for('create_deck') }}">{{ deck.title }}</a>
+    <a href="{{ url_for('deck', deck_id=deck.id) }}">{{ deck.title }}</a>
     <p>{{ deck.created_by.username }}</p>
     <p>deck_id: {{ deck.id }}</p>
     <hr>
