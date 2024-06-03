@@ -11,7 +11,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: #444444;
+    color: #3b3b3b;
 }
 
 .title {
@@ -35,12 +35,8 @@ h6 {
     font-weight: 500;
 }
 
-.content-section {
-    background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    margin-bottom: 20px;
+.legend {
+    font-family: "Viga", sans-serif;
 }
 
 .article-title {
@@ -48,7 +44,7 @@ h6 {
 }
 
 a.article-title:hover {
-    color: #428bca;
+    /* color: #428bca; */
     text-decoration: none;
 }
 
@@ -87,7 +83,7 @@ a.article-title:hover {
 }
 
 .account-heading {
-    font-size: 2.5rem;
+    font-size: 1.3rem;
 }
 
 footer {
@@ -151,10 +147,35 @@ h3 {
 
 .username {
     font-weight: 900;
-
 }
 
-i{ 
+i {
     padding-right: 7px;
-    color:#ffcc26;
+    color: #ffcc26;
+}
+
+.custom-btn {
+    background-color: rgb(89, 72, 237);
+    color: #ffffff;
+}
+
+.custom-btn:hover {
+    background-color: rgb(61, 44, 214);
+    color: #ffffff;
+}
+
+legend {
+    font-family: "Viga", sans-serif;
+}
+
+a {
+    text-align: center;
+    font-family: "Viga", sans-serif;
+    text-decoration: underline;
+    color: #333;
+}
+
+/* Change the link color on hover */
+a:hover {
+    color: rgb(89, 72, 237); /* Replace with your preferred hover color */
 }
