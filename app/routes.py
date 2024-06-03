@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request
-from app.forms import LoginForm, RegistrationForm, UpdateAccountForm
+from app.forms import LoginForm, RegistrationForm, UpdateAccountForm, DeckForm
 from app.models import User, Deck
 from app import app, db, bcrypt
 import secrets
@@ -7,27 +7,20 @@ from PIL import Image
 import os
 from flask_login import login_user, logout_user, login_required, current_user
 
-decks = [
-    {
-        'author': 'thomas mooney',
-        'title': 'Dutch Vocab',
-        'date_created': '2024-09-12'
-    },
-    {
-        'author': 'ciara gibbons',
-        'title': 'Every Capital',
-        'date_created': '2024-08-12'
-    }
-]
-
 @app.get("/")
+@login_required
 def index():
+    decks = Deck.query.all()
     return render_template('index.html', decks=decks, title="Home")
 
+@app.get("/review")
+def review():
+    return render_template('review.html')
 
-@app.get("/about")
-def about():
-    return render_template('about.html')
+@app.get("/quiz")
+def quiz():
+    return render_template('quiz.html')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -63,14 +56,14 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex +f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-    output_size = (125, 125)
+    output_size = (250, 250)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -94,3 +87,17 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+@app.route("/create_deck", methods=['GET', 'POST'])
+@login_required
+def create_deck():
+    decks = Deck.query.filter_by(user_id=current_user.id).all()
+    form = DeckForm()
+    if form.validate_on_submit():
+        deck = Deck(title=form.title.data, description=form.description.data, created_by=current_user)
+        db.session.add(deck)
+        db.session.commit()
+        flash('Deck created', 'success')
+        return redirect(url_for('create_deck'))
+
+    return render_template('create_deck.html', form=form, decks=decks)
