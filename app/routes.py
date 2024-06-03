@@ -1,10 +1,7 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import LoginForm, RegistrationForm
-import os
-
-app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY')  # Set secret key from environment variable
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+from flask import render_template, url_for, flash, redirect
+from app.forms import LoginForm, RegistrationForm
+from app.models import User, Deck
+from app import app
 
 decks = [
     {
@@ -19,11 +16,10 @@ decks = [
     }
 ]
 
-print(__name__)
-
 @app.get("/")
 def index():
     return render_template('index.html', decks=decks, title="home")
+
 
 @app.get("/about")
 def about():
@@ -49,5 +45,3 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Login', form=form)
 
-if __name__ == '__main__':
-    app.run(debug=True)
