@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div id="cards-container"></div>
+    <script src="fetchCards.js"></script>
+    <script>
+
+        // Function to fetch cards from the server
+async function fetchCards() {
+    try {
+        const response = await fetch('/cards/');
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        
+        const cards = await response.json();
+        
+        // Process the cards data
+        console.log(cards);
+        
+        // You can now use the cards data to update your UI
+        displayCards(cards);
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
+
+// Function to display cards on the UI (this is just an example)
+function displayCards(cards) {
+    const cardsContainer = document.getElementById('cards-container');
+    
+    cards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.innerHTML = `
+            <h3>${card.front}</h3>
+            <p>${card.back}</p>
+            <small>Created at: ${card.created_at}</small>
+        `;
+        cardsContainer.appendChild(cardElement);
+    });
+}
+
+// Call fetchCards to get and display the cards
+fetchCards();
+
+    </script>
+{% endblock content %}

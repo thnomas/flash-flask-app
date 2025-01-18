@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <script>
+        function checkAnswer() {
+            var guess = document.getElementById('guess').value;
+            var cardId = document.getElementById('card_id').value;
+            // Send an AJAX request to Flask route to check the answer
+            fetch('/check_guess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ guess: guess, card_id: cardId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.correct) {
+                    alert('Correct!');
+                } else {
+                    alert('Incorrect. Try again.');
+                }
+                // Reload the page to fetch the next card
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Flashcards</h1>
+    <div id="flashcard">
+        <h2>Front:</h2>
+        <p>{{ card.front }}</p>
+        <input type="hidden" id="card_id" value="{{ card.id }}">
+        <label for="guess">Guess the Back:</label>
+        <input type="text" id="guess" name="guess">
+        <button onclick="checkAnswer()">Submit Guess</button>
+    </div>
+</body>
+</html>
+
+
+{% endblock content %}

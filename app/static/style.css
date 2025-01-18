@@ -108,15 +108,7 @@ footer p {
     font-size: 0.8rem;
 }
 
-.card {
-    border-radius: 10px;
-    background-image: linear-gradient(to left bottom, #ffffff, #ffffff, #e6e6e6);
-    margin-bottom: 30px;
-    border: 2px solid rgb(57, 57, 57);
-    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
-    padding: 20px;
-    max-width: 350px;
-}
+
 
 .card a,
 h3,
@@ -135,7 +127,7 @@ h3 {
     font-weight: 500;
 }
 
-.card p {
+/* .card p {
     font-weight: 100;
     font-size: 1.0rem;
     padding: 10px;
@@ -143,7 +135,7 @@ h3 {
 
 .card:hover {
     background: linear-gradient(200deg, rgba(251, 255, 44, 0.829) 0%, rgba(240, 255, 63, 0.87) 100%);
-}
+} */
 
 .username {
     font-weight: 900;
@@ -171,11 +163,24 @@ legend {
 a {
     text-align: center;
     font-family: "Viga", sans-serif;
-    text-decoration: underline;
+    text-decoration: none;
     color: #333;
+}
+
+.creator{
+    background-color: #ffcc26;
+    padding: 2px 4px;
+    border-radius: 6px;
+    font-size: small;
+    float:left;
+    margin-right: 5px;
 }
 
 /* Change the link color on hover */
 a:hover {
     color: rgb(89, 72, 237); /* Replace with your preferred hover color */
+}
+
+.welcome{
+    text-align: center;
 }

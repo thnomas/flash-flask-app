@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from app.forms import LoginForm, RegistrationForm, UpdateAccountForm, DeckForm, CardForm
 from app.models import User, Deck, Card
 from app import app, db, bcrypt
@@ -69,7 +69,18 @@ def review():
 @app.get("/quiz")
 @login_required
 def quiz():
-    return render_template('quiz.html')
+    decks = Deck.query.filter_by(user_id=current_user.id).all()
+    return render_template('quiz.html', decks=decks)
+
+# write function that returns a subset of cards
+def get_quiz_cards():
+    pass
+
+# get cards for a user and then get a subset using teh above funtuoin.
+@app.route('/cards/')
+def users():
+  cards = Card.query.filter_by(user_id=current_user.id).all()
+  return jsonify(cards)
 
 @app.route("/account", methods=['GET','POST'])
 @login_required
@@ -115,3 +126,11 @@ def deck(deck_id):
         flash('Card created', 'success')
         return redirect(url_for('deck',  deck_id=deck.id))
     return render_template('deck.html', title=deck.title, form=form, deck=deck)
+
+@app.route("/review/<int:deck_id>", methods=['GET', 'POST'])
+@login_required
+def review_deck(deck_id):
+    decks = Deck.query.filter_by(user_id=current_user.id).all()
+    deck = Deck.query.get_or_404(deck_id)
+    card = Card.query.order_by(func.random()).first()
+    return render_template('review_deck.html', title=deck.title, decks=decks, deck=deck, card=card)

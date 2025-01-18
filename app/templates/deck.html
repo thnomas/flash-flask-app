@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h4>deck: {{ deck.title }}</h4>
-<p>desc: {{ deck.description }}</p>
+<h4>(deck) {{ deck.title }}</h4>
+<p>(desc) {{ deck.description }}</p>
 
-<hr>
-
-<h2>Create a new card</h2>
 <div class="content-section">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
