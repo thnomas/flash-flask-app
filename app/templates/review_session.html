@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container">
+        <p id="word-container"></p>
+        <input type="text" id="answer-input" placeholder="Type in Dutch...">
+        <p id="feedback"></p>
+    </div>
+    <script>
+       document.addEventListener("DOMContentLoaded", async () => {
+    const words = [
+        { english: "apple", dutch: "appel" },
+        { english: "banana", dutch: "banaan" },
+        { english: "orange", dutch: "sinaasappel" }
+    ];
+    
+    const wordContainer = document.getElementById("word-container");
+    const input = document.getElementById("answer-input");
+    const feedback = document.getElementById("feedback");
+    let currentWordIndex = 0;
+
+    function nextWord() {
+        if (currentWordIndex < words.length) {
+            wordContainer.textContent = words[currentWordIndex].english;
+            input.value = "";
+            feedback.textContent = "";
+            feedback.style.color = "black";
+            input.focus();
+        } else {
+            wordContainer.textContent = "You've completed the words!";
+            input.style.display = "none";
+        }
+    }
+
+    input.addEventListener("input", () => {
+        checkAnswer();
+    });
+
+    function checkAnswer() {
+        const correctAnswer = words[currentWordIndex].dutch.toLowerCase();
+        const userAnswer = input.value.trim().toLowerCase();
+        
+        if (userAnswer === correctAnswer) {
+            feedback.textContent = "Correct!";
+            feedback.style.color = "green";
+            input.style.backgroundColor = "lightgreen";
+            setTimeout(() => {
+                currentWordIndex++;
+                input.style.backgroundColor = "white";
+                nextWord();
+            }, 1000);
+        } else {
+            feedback.textContent = "";
+            input.style.backgroundColor = "white";
+        }
+    }
+
+    nextWord();
+});
+
+    </script>
+
+
+
+{% endblock content %}

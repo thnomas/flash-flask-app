@@ -64,7 +64,7 @@ def index():
 @login_required
 def review():
     decks = Deck.query.filter_by(user_id=current_user.id).all()
-    return render_template('review.html', decks=decks)
+    return render_template('review_session.html', decks=decks)
 
 @app.get("/quiz")
 @login_required
